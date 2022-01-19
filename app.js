@@ -13,7 +13,9 @@ app.use(bodyParser.urlencoded({ extended: true }));
 
 app.use(express.static("public"));
 
-mongoose.connect("mongodb+srv://admin-ck0d35:test123@cluster0.1pbbu.mongodb.net/todolistDB");
+mongoose.connect(
+  "mongodb+srv://admin-ck0d35:test123@cluster0.1pbbu.mongodb.net/todolistDB"
+);
 
 const itemSchema = new mongoose.Schema({
   name: String,
@@ -40,8 +42,13 @@ const item3 = new Item({
 
 const defaultItems = [item1, item2, item3];
 
-app.listen(3000, () => {
-  console.log("Server has started on port 3000.");
+let port = process.env.PORT;
+if (port === null || port === "") {
+  port === 3000;
+}
+
+app.listen(port, () => {
+  console.log("Server has started successfully.");
 });
 
 app.get("/", (req, res) => {
@@ -59,7 +66,6 @@ app.get("/", (req, res) => {
       res.render("list", { listTitle: "Today", newListItems: foundItems });
     }
   });
-
 });
 
 app.get("/about", (req, res) => {
@@ -137,5 +143,4 @@ app.post("/delete", (req, res) => {
       }
     );
   }
-
 });
